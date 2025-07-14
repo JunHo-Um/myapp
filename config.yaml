@@ -1,0 +1,36 @@
+# 업비트 자동매매 봇 설정 파일
+
+# API 설정
+api:
+  access_key: "YOUR_ACCESS_KEY_HERE"  # 업비트 액세스 키
+  secret_key: "YOUR_SECRET_KEY_HERE"  # 업비트 시크릿 키
+
+# 거래 설정
+trading:
+  market: "KRW-BTC"  # 거래할 마켓 (KRW-BTC: 비트코인, KRW-ETH: 이더리움 등)
+  check_interval: 30  # 체크 간격 (초)
+  min_krw_balance: 10000  # 최소 KRW 잔고 (원)
+
+# 전략 설정
+strategy:
+  type: "moving_average"  # 전략 타입 (moving_average, bollinger_bands)
+  
+  # 이동평균 크로스오버 전략 설정
+  moving_average:
+    short_period: 5
+    long_period: 20
+    buy_threshold: 0.02  # 2% 상승 시 매수
+    sell_threshold: -0.02  # 2% 하락 시 매도
+    max_investment_ratio: 0.1  # 보유 자금의 최대 10% 투자
+  
+  # 볼린저 밴드 전략 설정
+  bollinger_bands:
+    period: 20
+    standard_deviation: 2.0
+    max_investment_ratio: 0.1
+
+# 로깅 설정
+logging:
+  level: "INFO"  # 로그 레벨 (DEBUG, INFO, WARN, ERROR)
+  file: "logs/upbit-trading-bot.log"
+  max_history: 30  # 로그 파일 보관 일수
