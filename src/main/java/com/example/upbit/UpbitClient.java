@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.UUID;
+import java.util.List;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -102,6 +103,21 @@ public class UpbitClient {
                 throw new IOException("POST " + endpoint + " failed: " + response.code() + " " + response.message());
             }
             return mapper.readTree(response.body().string());
+        }
+    }
+
+    public double getTickerPrice(String market) throws IOException {
+        String endpoint = "/v1/ticker?markets=" + market;
+        Request request = new Request.Builder()
+                .url(BASE_URL + endpoint)
+                .get()
+                .build();
+        try (Response response = httpClient.newCall(request).execute()) {
+            if (!response.isSuccessful()) {
+                throw new IOException("GET " + endpoint + " failed: " + response.code() + " " + response.message());
+            }
+            JsonNode node = mapper.readTree(response.body().string());
+            return node.get(0).get("trade_price").asDouble();
         }
     }
 }

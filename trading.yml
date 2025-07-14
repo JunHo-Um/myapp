@@ -1,0 +1,7 @@
+market: "KRW-BTC"
+tradeAmountKrw: 10000
+shortWindow: 5
+longWindow: 20
+pollingSeconds: 30
+maxDailyLossKrw: 30000
+maxPositionExposureKrw: 100000
