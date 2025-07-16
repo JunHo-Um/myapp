@@ -1,0 +1,9 @@
+/workspace/src/main/java/com/dashboard/entity/Product.java
+/workspace/src/main/java/com/dashboard/entity/Order.java
+/workspace/src/main/java/com/dashboard/repository/ProductRepository.java
+/workspace/src/main/java/com/dashboard/entity/User.java
+/workspace/src/main/java/com/dashboard/repository/OrderRepository.java
+/workspace/src/main/java/com/dashboard/config/DataInitializer.java
+/workspace/src/main/java/com/dashboard/repository/UserRepository.java
+/workspace/src/main/java/com/dashboard/controller/DashboardController.java
+/workspace/src/main/java/com/dashboard/DashboardApplication.java

@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>주문 관리</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .sidebar {
+            min-height: 100vh;
+            box-shadow: inset -1px 0 0 rgba(0, 0, 0, .1);
+        }
+        .navbar-brand {
+            padding-top: .75rem;
+            padding-bottom: .75rem;
+            background-color: rgba(0, 0, 0, .25);
+            box-shadow: inset -1px 0 0 rgba(0, 0, 0, .25);
+        }
+        .sidebar .nav-link {
+            color: #333;
+        }
+        .sidebar .nav-link:hover {
+            color: #007bff;
+        }
+        .sidebar .nav-link.active {
+            color: #007bff;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- 사이드바 -->
+            <nav id="sidebar" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
+                <div class="position-sticky pt-3">
+                    <div class="navbar-brand px-3 mb-3">
+                        <i class="fas fa-tachometer-alt me-2"></i>대시보드
+                    </div>
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{/}">
+                                <i class="fas fa-home me-2"></i>홈
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{/users}">
+                                <i class="fas fa-users me-2"></i>사용자 관리
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" th:href="@{/orders}">
+                                <i class="fas fa-shopping-cart me-2"></i>주문 관리
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{/products}">
+                                <i class="fas fa-box me-2"></i>제품 관리
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+
+            <!-- 메인 컨텐츠 -->
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                    <h1 class="h2">주문 관리</h1>
+                    <div class="btn-toolbar mb-2 mb-md-0">
+                        <div class="btn-group me-2">
+                            <button type="button" class="btn btn-sm btn-success">
+                                <i class="fas fa-plus"></i> 새 주문
+                            </button>
+                            <button type="button" class="btn btn-sm btn-outline-secondary">
+                                <i class="fas fa-download"></i> 엑셀 다운로드
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 검색 및 필터 -->
+                <div class="row mb-3">
+                    <div class="col-md-3">
+                        <select class="form-select">
+                            <option value="">모든 상태</option>
+                            <option value="PENDING">대기</option>
+                            <option value="COMPLETED">완료</option>
+                            <option value="SHIPPED">배송중</option>
+                            <option value="CANCELLED">취소</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <input type="date" class="form-control" placeholder="시작일">
+                    </div>
+                    <div class="col-md-3">
+                        <input type="date" class="form-control" placeholder="종료일">
+                    </div>
+                    <div class="col-md-3">
+                        <div class="input-group">
+                            <input type="text" class="form-control" placeholder="주문번호 또는 고객명으로 검색...">
+                            <button class="btn btn-outline-secondary" type="button">
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 주문 테이블 -->
+                <div class="card">
+                    <div class="card-header">
+                        <h6 class="m-0 font-weight-bold text-primary">
+                            전체 주문 목록 
+                            <span class="badge bg-primary" th:text="${orders.size()}">0</span>
+                        </h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-hover">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>주문번호</th>
+                                        <th>고객명</th>
+                                        <th>제품명</th>
+                                        <th>수량</th>
+                                        <th>금액</th>
+                                        <th>상태</th>
+                                        <th>주문일</th>
+                                        <th>액션</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr th:each="order : ${orders}">
+                                        <td>
+                                            <strong th:text="${order.orderNumber}">ORD-001</strong>
+                                        </td>
+                                        <td th:text="${order.customerName}">김철수</td>
+                                        <td th:text="${order.productName}">노트북</td>
+                                        <td>
+                                            <span class="badge bg-secondary" th:text="${order.quantity + '개'}">2개</span>
+                                        </td>
+                                        <td>
+                                            <strong th:text="${#numbers.formatDecimal(order.amount, 0, 0) + '원'}">2,400,000원</strong>
+                                        </td>
+                                        <td>
+                                            <span th:class="${order.status == 'COMPLETED' ? 'badge bg-success' : 
+                                                             order.status == 'PENDING' ? 'badge bg-warning' : 
+                                                             order.status == 'SHIPPED' ? 'badge bg-info' : 'badge bg-danger'}" 
+                                                  th:text="${order.status == 'COMPLETED' ? '완료' : 
+                                                           order.status == 'PENDING' ? '대기' : 
+                                                           order.status == 'SHIPPED' ? '배송중' : '취소'}">완료</span>
+                                        </td>
+                                        <td th:text="${#temporals.format(order.orderDate, 'yyyy-MM-dd HH:mm')}">2023-12-01 14:30</td>
+                                        <td>
+                                            <div class="btn-group" role="group">
+                                                <button type="button" class="btn btn-sm btn-outline-primary">
+                                                    <i class="fas fa-eye"></i>
+                                                </button>
+                                                <button type="button" class="btn btn-sm btn-outline-warning">
+                                                    <i class="fas fa-edit"></i>
+                                                </button>
+                                                <button type="button" class="btn btn-sm btn-outline-danger">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 페이지네이션 -->
+                <div class="d-flex justify-content-between align-items-center mt-3">
+                    <div>
+                        <small class="text-muted">총 <strong th:text="${orders.size()}">10</strong>개의 주문</small>
+                    </div>
+                    <nav>
+                        <ul class="pagination pagination-sm mb-0">
+                            <li class="page-item disabled">
+                                <a class="page-link" href="#" tabindex="-1">이전</a>
+                            </li>
+                            <li class="page-item active">
+                                <a class="page-link" href="#">1</a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" href="#">2</a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" href="#">3</a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" href="#">다음</a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

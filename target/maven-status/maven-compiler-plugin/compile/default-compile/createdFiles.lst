@@ -1,0 +1,9 @@
+com/dashboard/repository/OrderRepository.class
+com/dashboard/DashboardApplication.class
+com/dashboard/repository/UserRepository.class
+com/dashboard/entity/Order.class
+com/dashboard/config/DataInitializer.class
+com/dashboard/entity/Product.class
+com/dashboard/entity/User.class
+com/dashboard/repository/ProductRepository.class
+com/dashboard/controller/DashboardController.class
